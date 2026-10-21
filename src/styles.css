@@ -98,3 +98,9 @@ h1 {
 .footer {
   margin: 12px 0 0;
 }
+
+.quick-add {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
