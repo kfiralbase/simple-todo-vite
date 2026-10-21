@@ -17,6 +17,16 @@ const App = () => {
     setText("");
   };
 
+  const addMany = (count: number) =>
+    setTodos((list) => [
+      ...list,
+      ...Array.from({ length: count }, (_, i) => ({
+        id: Date.now() + i,
+        text: `New task ${list.length + i + 1}`,
+        done: false,
+      })),
+    ]);
+
   const toggle = (id: number) =>
     setTodos((list) => list.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));
 
@@ -28,6 +38,14 @@ const App = () => {
     <main className="page">
       <section className="card">
         <h1>Simple Todo</h1>
+
+        <div className="quick-add">
+          {[1, 2, 3].map((n) => (
+            <button key={n} type="button" onClick={() => addMany(n)}>
+              {n}
+            </button>
+          ))}
+        </div>
 
         <form className="add" onSubmit={addTodo}>
           <input value={text} onChange={(e) => setText(e.target.value)} placeholder="What needs doing?" />
