@@ -24,6 +24,14 @@ const App = () => {
 
   const left = todos.filter((t) => !t.done).length;
 
+  const [sort, setSort] = useState<"az" | "newest" | "status" | null>(null);
+  const sorted = [...todos].sort((a, b) =>
+    sort === "az" ? a.text.localeCompare(b.text)
+    : sort === "newest" ? b.id - a.id
+    : sort === "status" ? Number(a.done) - Number(b.done)
+    : 0
+  );
+
   return (
     <main className="page">
       <section className="card">
@@ -37,8 +45,17 @@ const App = () => {
         {todos.length === 0 ? (
           <p className="empty">Nothing to do yet.</p>
         ) : (
+          <>
+          <div className="sort" style={{ display: "flex", gap: 8, margin: "12px 0" }}>
+            {([["az", "A–Z"], ["newest", "Newest"], ["status", "Status"]] as const).map(([key, label]) => (
+              <button key={key} type="button" aria-pressed={sort === key} style={{ fontWeight: sort === key ? 700 : 400 }}
+                onClick={() => setSort(sort === key ? null : key)}>
+                {label}
+              </button>
+            ))}
+          </div>
           <ul className="list">
-            {todos.map((t) => (
+            {sorted.map((t) => (
               <li key={t.id} className={t.done ? "done" : ""}>
                 <label>
                   <input type="checkbox" checked={t.done} onChange={() => toggle(t.id)} />
@@ -50,6 +67,7 @@ const App = () => {
               </li>
             ))}
           </ul>
+          </>
         )}
 
         <p className="footer">{left} left</p>
